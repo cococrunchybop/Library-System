@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="kainis.css">
+    <title>Library System - Books</title>
+
+    <style>
+        #book-gallery-container {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 25px;
+            justify-items: center;
+        }
+
+        .book-item {
+            cursor: pointer;
+            overflow: hidden;
+            border-radius: 8px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-align: center;
+            max-width: 180px;
+        }
+
+        .book-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .book-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            border-radius: 6px;
+            border: 1px solid #ddd;
+        }
+
+        .book-item p {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 10px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed; 
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%; 
+            height: 100%; 
+            overflow: auto; 
+            background-color: rgba(0,0,0,0.7);
+            padding-top: 50px;
+        }
+
+        
+        .modal-content {
+            background-color: #fefefe;
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 10px;
+            width: 90%; 
+            max-width: 600px;
+            position: relative;
+            box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            max-height: 90vh; 
+            overflow-y: auto; 
+        }
+
+        .modal-content h2 {
+            color: #e8491d;
+            margin-top: 0;
+            margin-bottom: 20px;
+        }
+
+        .details-grid {
+            display: grid;
+            grid-template-columns: 1fr 2fr;
+            gap: 10px;
+            width: 100%;
+            max-width: 400px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+
+        .details-grid strong {
+            color: #505050;
+        }
+
+        #modal-image {
+            max-width: 100%;
+            max-height: 300px;
+            margin: 20px 0;
+            border-radius: 5px;
+            object-fit: cover;
+            border: 1px solid #ddd;
+        }
+
+        .close-button {
+            color: #aaa;
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 30px;
+            font-weight: bold;
+        }
+
+        .close-button:hover,
+        .close-button:focus {
+            color: #e8491d;
+            text-decoration: none;
+            cursor: pointer;
+        }
+
+        .borrow-btn {
+            background-color: #e8491d;
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .borrow-btn:hover {
+            background-color: #c43c16;
+        }
+        .book-grid {
+            display: grid;
+            grid-template-columns: repeat(6, 1fr);
+            gap: 25px;
+            justify-items: center;
+        }
+        @media(max-width: 768px){
+            header #branding,
+            header nav,
+            header nav li {
+                float: none;
+                text-align: center;
+                width: 100%;
+                grid-template-columns: 1fr;
+            }
+            header nav ul {
+                display: grid;
+                gap: 10px;
+                grid-template-columns: 1fr 1fr;
+            }
+            .book-grid {
+                grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+                gap: 15px;
+            }
+        
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1><span class="highlight">Library</span> System</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="Admin-Dashboard.html".html">Dashboard</a></li>
+                    <li class="current"><a href="Admin-books.html">Books</a>
+                    <li><a href="admin-manage borrowers.html">Manage Borrowers</a></li>
+                    <li><a href="About.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="book-gallery-container">
+        <h1 style="text-align: center; color: #333; margin-bottom: 30px;">Available Books</h1>
+        
+        <div class="book-grid" id="book-grid"></div>
+      
+        <div id="add-book-modal" class="modal">
+            <div class="modal-content">
+                <span class="close-button" id="close-add-book">&times;</span>
+                <h2>Add New Book</h2>
+                <form id="add-book-form" style="width:100%;max-width:400px;">
+                    <label>Title:<br><input type="text" id="add-title" required style="width:100%"></label><br><br>
+                    <label>Language:<br><input type="text" id="add-language" required style="width:100%"></label><br><br>
+                    <label>Author:<br><input type="text" id="add-author" required style="width:100%"></label><br><br>
+                    <label>Genre:<br><input type="text" id="add-genre" required style="width:100%"></label><br><br>
+                    <label>Date of Release:<br><input type="date" id="add-release-date" required style="width:100%"></label><br><br>
+
+                    <label>Book Cover Photo:<br><input type="file" id="add-image-file" accept="image/*" required style="width:100%"></label><br><br>
+                    <label>Summary:<br><textarea id="add-summary" required style="width:100%"></textarea></label><br><br>
+                    <button type="submit" class="borrow-btn" style="background-color:#2d8f2d;width:100%;">Add Book</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <div id="book-details-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button">&times;</span>
+            <div id="current-book-data" data-id="" style="display:none;"></div>
+            <h2>Book Details</h2>
+            
+            <img id="modal-image" src="" alt="Book Cover" />
+
+            <div class="details-grid">
+                <strong>Title:</strong> <span id="modal-title"></span>
+                <strong>Language:</strong> <span id="modal-language"></span>
+                <strong>Author:</strong> <span id="modal-author"></span>
+                <strong>Genre:</strong> <span id="modal-genre"></span>
+                <strong>Date of Release:</strong> <span id="modal-release-date"></span>
+                <strong>Summary:</strong> <span id="modal-summary"></span>
+            </div>
+         
+        </div>
+    </div>
+
+
+    <script>
+        const booksData = [
+            { 
+                id: 1, 
+                 title: 'The Secret of Secrets: A Novel', 
+                  language: 'English',
+                   author: 'Dan Brown', 
+                    genre: 'Fiction / Thrillers / Suspense', 
+                    releaseDate: 'Sep 9, 2025', 
+                     
+                      imageUrl: 'Bookspng/1.jpg',
+                       summary: 'Robert Langdon, esteemed professor of symbology, travels to Prague to attend a groundbreaking lecture by Katherine Solomon—a prominent noetic scientist with whom he has recently begun a relationship. Katherine is on the verge of publishing an explosive book that contains startling discoveries about the nature of human consciousness and threatens to disrupt centuries of established belief. But a brutal murder catapults the trip into chaos, and Katherine suddenly disappears along with her manuscript. Langdon finds himself targeted by a powerful organization and hunted by a chilling assailant sprung from Prague’s most ancient mythology. As the plot expands into London and New York, Langdon desperately searches for Katherine . . . and for answers. In a thrilling race through the dual worlds of futuristic science and mystical lore, he uncovers a shocking truth about a secret project that will forever change the way we think about the human mind.' 
+            },
+          
+            { id: 2,
+                 title: 'The Weakest Tamer Began a Journey to Pick Up Trash (Light Novel)',
+                 language: 'English',
+                  author: 'Honobonoru500',
+                   genre: 'Comics & Graphic Novels / Manga / Light Novel',
+                    releaseDate: 'Oct 30, 2025',
+                     
+                      imageUrl: 'Bookspng/2.jpg',
+                      summary: 'Determined to save Marya from the clutches of the church, Ivy and her party flee from the village with her. Along the way, they have a joyful reunion with Ciel, who has brought the members of Zephyr to join them! With these strong adventurers by their side, they take advantage of their time out in the wild to go on a loot-collecting journey in caves along the way. But when they decide to settle down in one of the caves, theyre found yet again! Will Ivy and her friends ever be able to leave the church in the dust...or are they doomed to run forever?'
+
+            },
+
+            { id: 3,
+                 title: 'Amazing Spider-Man: Learning To Crawl',
+                 language: 'English',
+                  author: 'Dan Slott',
+                   genre: 'Comics & Graphic Novels / Superheroes',
+                   releaseDate: 'Nov 26, 2014',
+                    
+                     imageUrl: 'Bookspng/3.jpg',
+                     summary: 'Collects Amazing Spider-Man #1.1-1.5, 1 (.1 story).ÿ' 
+                    },
+
+            { id: 4,
+                 title: 'Dark Psychology And Manipulation: Exploring the Depths of Dark Psychology and Revealing Hidden Manipulative Tactics',
+                 language: 'English',
+                  author: 'Harry Bolton',
+                   genre: 'Body, Mind & Spirit / Inspiration & Personal Growth',
+                    releaseDate: 'Feb 3, 2024',
+                     
+                      imageUrl: 'Bookspng/4.jpg',
+                       summary: 'In Harry Boltons masterful sixth volume, "Dark Psychology and Manipulation: Exploring the Depths of Dark Psychology and Revealing Hidden Manipulative Tactics," the author introduces us to a dark and complex psychological world, where the nuances of manipulation are intertwined with depth of the human mind. Bolton, with his usual mastery, guides us through an acute examination of the hidden strategies that those who master the art of manipulation use to influence others'
+            },
+
+            { id: 5,
+                 title: 'KJV, Know The Word Study Bible, Red Letter: Gain a greater understanding of the Bible book by book, verse by verse, or topic by topic',
+                 language: 'English',
+                  author: 'Thomas Nelson',
+                   genre: 'Bibles / King James Version / Study',
+                    releaseDate: 'Sep 12, 2017', 
+                    imageUrl: 'Bookspng/5.jpg',
+                     summary: 'The KJV Know the Word Study Bible offers three easy ways to begin studying Scripture and helps individuals transition from being a casual reader of the Bible to becoming a regular student of the Bible. You can choose to study the Bible book-by-book, verse-by-verse, or topic-by-topic; each path offers powerful insights that will help you develop a daily routine of Bible study. The book-by-book series of notes leads you through the main points of each book of the Bible. The verse-by-verse notes help you to dig deeper into God’s Word. The topic-by-topic articles, which cover 21 theological topics, guide you through a series of insightful notes and give you a thorough biblical understanding of each topic. With the beautiful and timeless text of the KJV translation, the KJV Know the Word Study Bible offers you choices of how to study Scripture and grow in your relationship with Christ.' 
+                    },
+
+            { id: 6,
+                 title: 'The 48 Laws of Power',
+                 language: 'English',
+                  author: 'Robert Greene',
+                   genre: 'Business & Economics / Leadership',
+                    releaseDate: 'Sep 1, 2000',
+                     
+                      imageUrl: 'Bookspng/6.jpg',
+                       summary: ' Amoral, cunning, ruthless, and instructive, this multi-million-copy New York Times bestseller is the definitive manual for anyone interested in gaining, observing, or defending against ultimate control – from the author of The Laws of Human Nature ' 
+                    },
+
+            { id: 7,
+                 title: 'Wolverine by Greg Rucka: Enemy of the State',
+                 language: 'English',
+                  author: 'Mark Milar',
+                   genre: 'Comics & Graphic Novels / Superheroes',
+                   releaseDate: 'Jun 25, 2008',
+                    
+                     imageUrl: 'Bookspng/7.jpg',
+                      summary: ' The complete epic, available for the first time in softcover! Brainwashed by the ninjas of the Hand, Wolverine slices and dices his way through foes and friends alike, ultimately resulting in the death of an X-Man! Captured and reprogrammed, Wolverine is sent against his former masters - but amid an orgy of death and destruction, is even the fiercest mutant alive a match for the dadly stare of the Gorgon?! Collecting Wolverine #20-32.' 
+                    },
+
+            { id: 8, 
+                title: 'Alchemised',
+                language: 'English',
+                 author: 'SenLinYu',
+                  genre: 'Fiction / Fantasy / Dark Fantasy', 
+                   releaseDate: 'Sep 23, 2025',
+                    
+                     imageUrl: 'Bookspng/8.jpg',
+                      summary: ' In this riveting dark fantasy debut, a woman with missing memories fights to survive a war-torn world of necromancy and alchemy—and the man tasked with unearthing the deepest secrets of her past.  ' 
+                    },
+
+            { id: 9,
+                 title: 'Grit: The Power of Passion and Perseverance',
+                 language: 'English',
+                  author: 'Angela Duckworth',
+                   genre: 'Self-Help / Personal Growth / General', 
+                   releaseDate: 'May 3, 2016',
+                    
+                     imageUrl: 'Bookspng/9.jpg',
+                      summary: ' “Duckworth’s ideas about the cultivation of tenacity have clearly changed some lives for the better” (The New York Times Book Review). Among Grit’s most valuable insights: any effort you make ultimately counts twice toward your goal; grit can be learned, regardless of IQ or circumstances; when it comes to child-rearing, neither a warm embrace nor high standards will work by themselves; how to trigger lifelong interest; the magic of the Hard Thing Rule; and so much more. Winningly personal, insightful, and even life-changing, Grit is a book about what goes through your head when you fall down, and how that—not talent or luck—makes all the difference. This is “a fascinating tour of the psychological research on success” (The Wall Street Journal).  ' 
+                    },
+
+            { id: 10, 
+                title: 'The Official Netflix Cookbook: 70 Recipes from Your TV to Your Table',
+                language: 'English',
+                 author: 'Anna Painter',
+                  genre: 'Cooking / Courses & Dishes / General',
+                   releaseDate: 'Oct 3, 2023',
+                   
+                    imageUrl: 'Bookspng/10.jpg',
+                     summary: ' Pair your Netflix home menu of shows, movies, docuseries, and stand-up comedy specials with the perfect snacks, main courses, desserts, and drinks. Each chapter offers delicious Netflix-category themed cuisine that will give viewers the perfect additions to their Casual Viewing, Familiar Favorites, and Watch In One Night marathons! Prepare a themed meal to enhance your 90-Minute Movie viewing experience or make delicious desserts based on TV Shows Based on Books. Prepare to Watch It Again and cook it again!  ' 
+                    },
+            { id: 11, 
+                title: 'Rich Dad Poor Dad', 
+                language: 'English', 
+                author: 'Robert T. Kiyosaki', 
+                genre: 'Business & Economics / Personal Finance', 
+                releaseDate: 'Apr 1, 2017', 
+                price: 180.25, 
+                imageUrl: 'Bookspng/11.jpg', 
+                summary: 'It challenges the way you think about money. It provides a blueprint for financial success.' 
+            },
+            { id: 12, 
+                title: 'The Great Gatsby', 
+                language: 'English', 
+                author: 'F. Scott Fitzgerald', 
+                genre: 'Classics / American Literature', 
+                releaseDate: 'Apr 10, 1925', 
+                price: 199.50, 
+                imageUrl: 'Bookspng/12.jpg', 
+                summary: 'The story of the mysteriously wealthy Jay Gatsby and his love for the beautiful Daisy Buchanan, of lavish parties on Long Island at a time when The New York Times noted "gin was the national drink and sex the national obsession," it is a story of America during the roaring twenties.' 
+            },
+            { id: 13, 
+                title: 'Atomic Habits: An Easy & Proven Way to Build Good Habits & Break Bad Ones', 
+                language: 'English', 
+                author: 'James Clear', 
+                genre: 'Self-Help / Personal Development', 
+                releaseDate: 'Oct 16, 2018', 
+                price: 200.00, 
+                imageUrl: 'Bookspng/13.jpg', 
+                summary: 'An easy-to-read book that offers a practical framework for building better habits every day.' 
+            },
+            { id: 14, 
+                title: 'The Silent Patient', 
+                language: 'English', 
+                author: 'Alex Michaelides', 
+                genre: 'Fiction / Thrillers / Psychological', 
+                releaseDate: 'Feb 5, 2019', 
+                price: 166.99, 
+                imageUrl: 'Bookspng/14.jpg', 
+                summary: 'A startling psychological thriller about a woman’s act of violence against her husband—and the psychotherapist determined to uncover the truth behind it.' 
+            },
+            { id: 15, 
+                title: 'Sapiens: A Brief History of Humankind', 
+                language: 'English', 
+                author: 'Yuval Noah Harari', 
+                genre: 'History / World', 
+                releaseDate: 'Feb 10, 2015', 
+                price: 120.00, 
+                imageUrl: 'Bookspng/15.jpg', 
+                summary: 'Dr. Yuval Noah Harari spans the whole of human history, from the very first humans to walk the earth to the radical—and sometimes devastating—breakthroughs of the Cognitive, Agricultural, and Scientific Revolutions.' 
+            },
+            { id: 16, 
+                title: 'Where the Crawdads Sing', 
+                language: 'English', 
+                author: 'Delia Owens', 
+                genre: 'Fiction / Literary', 
+                releaseDate: 'Aug 14, 2018', 
+                price: 150.00, 
+                imageUrl: 'Bookspng/16.jpg', 
+                summary: 'A coming-of-age story that is also a gorgeous ode to the natural world, a heartbreaking love story, and a surprising murder mystery.' 
+            },
+            { 
+                id: 17, 
+                title: 'The Chronicles of Narnia: The Lion, the Witch, and the Wardrobe', 
+                language: 'English', 
+                author: 'C.S. Lewis', 
+                genre: 'Fantasy / Children\'s', 
+                releaseDate: 'Oct 16, 1950', 
+                price: 299.75, 
+                imageUrl: 'Bookspng/17.jpg', 
+                summary: 'Four siblings discover the magical world of Narnia through a wardrobe.' 
+            },
+            { 
+                id: 18, 
+                title: 'Percy Jackson & the Olympians: The Lightning Thief', 
+                language: 'English', 
+                author: 'Rick Riordan', 
+                genre: 'Fantasy / Young Adult', 
+                releaseDate: 'Jul 1, 2005', 
+                price: 200.75, 
+                imageUrl: 'Bookspng/18.jpg', 
+                summary: 'Percy Jackson discovers he is a demigod and embarks on a quest to prevent a war among the gods.' 
+            },
+            { 
+                id: 19, 
+                title: 'To Kill a Mockingbird', 
+                language: 'English', 
+                author: 'Harper Lee', 
+                genre: 'Classics / Southern Literature', 
+                releaseDate: 'Jul 11, 1960', 
+                price: 99.15, 
+                imageUrl: 'Bookspng/19.jpg', 
+                summary: 'A story of racial injustice and the loss of innocence in the American South.' 
+            },
+            { 
+                id: 20, 
+                title: 'The Hobbit', 
+                language: 'English', 
+                author: 'J.R.R. Tolkien', 
+                genre: 'Fantasy / Adventure', 
+                releaseDate: 'Sep 21, 1937', 
+                price: 341.78, 
+                imageUrl: 'Bookspng/20.jpg', 
+                summary: 'Bilbo Baggins is whisked away from his comfortable life to journey with a company of dwarves to reclaim their treasure from the dragon Smaug.' 
+            }
+                    
+        ];
+
+        const bookGrid = document.getElementById('book-grid');
+            const modal = document.getElementById('book-details-modal');
+            const closeButton = document.querySelector('.close-button');
+           const borrowButton = document.getElementById('borrow-button');
+
+        const currentBookData = document.getElementById('current-book-data');
+
+        function closeModal() {
+            modal.style.display = 'none';
+        }
+
+        function openModal(book) {
+            document.getElementById('modal-title').textContent = book.title;
+               document.getElementById('modal-language').textContent = book.language;
+                document.getElementById('modal-author').textContent = book.author;
+                 document.getElementById('modal-genre').textContent = book.genre;
+                  document.getElementById('modal-release-date').textContent = book.releaseDate;
+                document.getElementById('modal-summary').textContent = book.summary;
+               document.getElementById('modal-image').src = book.imageUrl; 
+             document.getElementById('modal-image').alt = book.title + ' Cover';
+            currentBookData.setAttribute('data-id', book.id);
+            modal.style.display = 'flex';
+        }
+
+        function renderBooks() {
+            booksData.forEach(book => {
+                const item = document.createElement('div');
+                  item.className = 'book-item';
+                
+                const img = document.createElement('img');
+                 img.src = book.imageUrl; 
+                  img.alt = book.title + ' Cover';
+
+                const title = document.createElement('p');
+                title.textContent = book.title;
+
+                item.appendChild(img);
+                  item.appendChild(title);
+  
+                item.addEventListener('click', () => {
+                    openModal(book);
+                  });
+
+                bookGrid.appendChild(item);
+            });
+        }
+        
+
+
+
+
+
+        closeButton.addEventListener('click', closeModal);
+
+        window.addEventListener('click', (event) => {
+            if (event.target === modal) {
+                closeModal();
+            }
+        });
+
+        document.addEventListener('keydown', (event) => {
+             if (event.key === 'Escape' && modal.style.display === 'flex') {
+                closeModal();
+            }
+        });
+        
+
+
+        document.addEventListener('DOMContentLoaded', renderBooks);
+    
+        const addBookBtn = document.getElementById('add-book-btn');
+        const addBookModal = document.getElementById('add-book-modal');
+        const closeAddBook = document.getElementById('close-add-book');
+        const addBookForm = document.getElementById('add-book-form');
+
+        addBookBtn.addEventListener('click', () => {
+            addBookModal.style.display = 'flex';
+        });
+        closeAddBook.addEventListener('click', () => {
+            addBookModal.style.display = 'none';
+            addBookForm.reset();
+        });
+        window.addEventListener('click', (event) => {
+            if (event.target === addBookModal) {
+                addBookModal.style.display = 'none';
+                addBookForm.reset();
+            }
+        });
+        addBookForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+  
+            
+        });
+    </script>
+</body>
+</html>

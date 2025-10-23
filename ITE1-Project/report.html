@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="kainis.css">
+    <title>Library System - Reports</title>
+    <style>
+        
+        #branding h1 { margin: 0; }
+        .highlight { color: #e8491d; font-weight: bold; }
+        #report-section {
+            padding: 40px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .report-box {
+            background: #fff;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+        }
+        .report-box h2 {
+            color: #333;
+            border-bottom: 2px solid #e8491d;
+            padding-bottom: 10px;
+            margin-bottom: 15px;
+        }
+        .report-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 10px;
+            font-size: 14px;
+        }
+        .report-table th, .report-table td {
+            border: 1px solid #ddd;
+            padding: 12px 8px;
+            text-align: left;
+        }
+        .report-table th {
+            background-color: #f8f8f8;
+            color: #333;
+            font-weight: bold;
+        }
+        .report-table tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+        .report-table tbody tr:hover {
+            background-color: #f1f1f1;
+        }
+        .no-data {
+            text-align: center;
+            padding: 20px;
+            color: #777;
+            font-style: italic;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1><span class="highlight">Library</span> System</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="Dashboard.html">Dashboard</a></li>
+                    <li><a href="managebook.html">Manage Books</a>
+                    <li><a href="manageborrower.html">Manage Borrowers</a></li>
+                    <li class="current" ><a href="report.html">Make Report</a></li>
+                    <li><a href="home.html" id="logout-link">Log out</a></li>
+
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section id="report-section">
+        <h1 style="text-align: center; color: #333; margin-bottom: 30px;">Library Reports</h1>
+        <div class="report-box" id="submit-report-box">
+            <h2>Submit a Report</h2>
+            <form id="report-form" style="margin-bottom:20px;">
+                <label for="report-type" style="font-weight:bold;">Report Type:</label>
+                <select id="report-type" required style="width:100%;padding:8px;margin-bottom:10px;border-radius:4px;border:1px solid #ccc;">
+                    <option value="">Select Type</option>
+                    <option value="inventory">Book Inventory (Usage)</option>
+                    <option value="financial">Borrowing Transaction (Financial)</option>
+                    <option value="damages">Damages</option>
+                </select>
+                <input type="text" id="report-title" placeholder="Book Title (if applicable)" style="width:100%;padding:8px;margin-bottom:10px;border-radius:4px;border:1px solid #ccc;">
+                <textarea id="report-status" placeholder="Status / What are the problems" required style="width:100%;padding:8px;margin-bottom:10px;border-radius:4px;border:1px solid #ccc;min-height:80px;"></textarea>
+                <button type="submit" style="background:#e8491d;color:#fff;padding:10px 20px;border:none;border-radius:4px;cursor:pointer;">Submit Report</button>
+            </form>
+            <div id="report-submit-msg" style="color:#388e3c;font-weight:bold;"></div>
+        </div>
+        <div class="report-box" id="all-reports-table">
+            <h2>Submitted Reports</h2>
+            <table class="report-table">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Type</th>
+                        <th>Book Title</th>
+                        <th>Status / Problems</th>
+                        <th>Date/Time</th>
+                    </tr>
+                </thead>
+                <tbody id="all-reports-body"></tbody>
+            </table>
+        </div>
+    </section>
+
+    <script>
+        const firstName = localStorage.getItem('firstName');
+        const userGreeting = document.getElementById('user-greeting');
+        const logoutLink = document.getElementById('logout-link');
+        if (!firstName) {
+            window.location.href = 'home.html';
+        } else {
+            userGreeting.textContent = `Welcome, ${firstName.charAt(0).toUpperCase() + firstName.slice(1)}!`;
+        }
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('firstName');
+            localStorage.removeItem('role');
+            window.location.href = 'home.html';
+        });
+
+        function loadBorrowingTransactions() {
+            const transactions = localStorage.getItem('borrowingTransactions');
+            return transactions ? JSON.parse(transactions) : [];
+        }
+
+        function renderBookInventoryReport() {
+            const tbody = document.getElementById('book-inventory-body');
+            tbody.innerHTML = '';
+
+            if (booksData.length === 0) {
+                const row = tbody.insertRow();
+                 const cell = row.insertCell();
+                  cell.colSpan = 5;
+                  cell.textContent = 'No books in inventory.';
+                  cell.style.textAlign = 'center';
+                return;
+            }
+
+            booksData.forEach(book => {
+                const row = tbody.insertRow();
+                 row.insertCell().textContent = book.id;
+                  row.insertCell().textContent = book.title;
+                   row.insertCell().textContent = book.author;
+                  row.insertCell().textContent = book.genre;
+                row.insertCell().textContent = `₱ ${parseFloat(book.price).toFixed(2)}`;
+            });
+        }
+
+        function renderFinancialReport() {
+            const tbody = document.getElementById('transaction-history-body');
+             const summaryDiv = document.getElementById('financial-summary');
+            tbody.innerHTML = '';
+            
+            const transactions = loadBorrowingTransactions();
+
+            if (transactions.length === 0) {
+                 const row = tbody.insertRow();
+                  const cell = row.insertCell();
+                  cell.colSpan = 5;
+                  cell.textContent = 'No borrowing transactions recorded.';
+                 cell.style.textAlign = 'center';
+                summaryDiv.textContent = 'Total Transactions: 0 | Total Estimated Revenue: ₱ 0.00';
+                return;
+            }
+
+            let totalRevenue = 0;
+            transactions.sort((a, b) => b.timestamp - a.timestamp);
+
+            transactions.forEach(transaction => {
+                const row = tbody.insertRow();
+                 const date = new Date(transaction.timestamp).toLocaleString();
+                const price = parseFloat(transaction.price || 0); 
+
+                row.insertCell().textContent = transaction.id;
+                   row.insertCell().textContent = transaction.bookTitle;
+                     row.insertCell().textContent = transaction.status;
+                   row.insertCell().textContent = `₱ ${price.toFixed(2)}`;
+                row.insertCell().textContent = date;
+                
+                if (transaction.status === 'Borrowing') {
+                    totalRevenue += price; 
+                }
+            });
+
+            summaryDiv.innerHTML = `
+                <p><strong>Total Transactions:</strong> ${transactions.length}</p>
+                <p><strong>Total Borrowing Value (Estimated Revenue):</strong> ₱ ${totalRevenue.toFixed(2)}</p>
+            `;
+        }
+        
+        function saveUnifiedReport(report) {
+            let reports = JSON.parse(localStorage.getItem('unifiedReports') || '[]');
+            reports.unshift(report);
+            localStorage.setItem('unifiedReports', JSON.stringify(reports));
+        }
+
+        document.getElementById('report-form').onsubmit = function(e) {
+            e.preventDefault();
+            const type = document.getElementById('report-type').value;
+            const title = document.getElementById('report-title').value.trim();
+            const status = document.getElementById('report-status').value.trim();
+            if (!type || !status) return;
+            const report = {
+                id: Date.now(),
+                type,
+                title,
+                status,
+                date: new Date().toLocaleString()
+            };
+            saveUnifiedReport(report);
+            document.getElementById('report-submit-msg').textContent = 'Report submitted!';
+            document.getElementById('report-form').reset();
+            renderAllReports();
+            setTimeout(() => { document.getElementById('report-submit-msg').textContent = ''; }, 2000);
+        };
+
+        function renderAllReports() {
+            const tbody = document.getElementById('all-reports-body');
+            let reports = JSON.parse(localStorage.getItem('unifiedReports') || '[]');
+            tbody.innerHTML = '';
+            if (reports.length === 0) {
+                const row = tbody.insertRow();
+                const cell = row.insertCell();
+                cell.colSpan = 5;
+                cell.textContent = 'No reports submitted.';
+                cell.style.textAlign = 'center';
+                return;
+            }
+            reports.forEach(r => {
+                const row = tbody.insertRow();
+                row.insertCell().textContent = r.id;
+                row.insertCell().textContent = r.type;
+                row.insertCell().textContent = r.title;
+                row.insertCell().textContent = r.status;
+                row.insertCell().textContent = r.date;
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAllReports();
+        });
+        if (!firstName) {
+            window.location.href = 'home.html';
+        } else if (userGreeting) {
+            userGreeting.textContent = `Welcome, ${firstName.charAt(0).toUpperCase() + firstName.slice(1)}!`;
+        }
+        logoutLink.addEventListener('click', (e) => {
+            e.preventDefault();
+            localStorage.removeItem('firstName');
+            localStorage.removeItem('role');
+            window.location.href = 'home.html';
+        });
+
+        function saveUnifiedReport(report) {
+            let reports = JSON.parse(localStorage.getItem('unifiedReports') || '[]');
+            reports.unshift(report);
+            localStorage.setItem('unifiedReports', JSON.stringify(reports));
+        }
+
+        function renderAllReports() {
+            const tbody = document.getElementById('all-reports-body');
+            let reports = JSON.parse(localStorage.getItem('unifiedReports') || '[]');
+            tbody.innerHTML = '';
+            if (reports.length === 0) {
+                const row = tbody.insertRow();
+                const cell = row.insertCell();
+                cell.colSpan = 5;
+                cell.textContent = 'No reports submitted.';
+                cell.style.textAlign = 'center';
+                return;
+            }
+            reports.forEach(r => {
+                const row = tbody.insertRow();
+                row.insertCell().textContent = r.id;
+                row.insertCell().textContent = r.type;
+                row.insertCell().textContent = r.title;
+                row.insertCell().textContent = r.status;
+                row.insertCell().textContent = r.date;
+            });
+        }
+
+        document.getElementById('report-form').addEventListener('submit', function(e) {
+            e.preventDefault();
+            const type = document.getElementById('report-type').value;
+            const title = document.getElementById('report-title').value.trim();
+            const status = document.getElementById('report-status').value.trim();
+            if (!type || !status) return;
+            const report = {
+                id: Date.now(),
+                type,
+                title,
+                status,
+                date: new Date().toLocaleString()
+            };
+            saveUnifiedReport(report);
+            document.getElementById('report-submit-msg').textContent = 'Report submitted!';
+            this.reset();
+            renderAllReports();
+            setTimeout(() => { document.getElementById('report-submit-msg').textContent = ''; }, 2000);
+        });
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderAllReports();
+        });
+    </script>
+</body>
+</html>

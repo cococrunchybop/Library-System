@@ -1,0 +1,198 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="kainis.css">
+        <title>Library System - Members</title>
+        <style>
+
+            .members-cont {
+                width: 80%;
+                margin: auto;
+                display: flex;
+                flex-wrap: wrap;      
+                gap: 24px;            
+                justify-content: flex-start; 
+                align-items: flex-start; 
+                overflow: show;  
+            }       
+            .book-box {
+                background: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+                padding: 24px 16px;
+                margin: 20px auto;
+                width: 30%;
+                display: flex;
+                flex-wrap: nowrap;
+                align-items: center;
+                transition: box-shadow 0.2s;
+                gap: 30px;
+            }
+            
+           .about-cont {
+                width: 60%;
+                margin: auto;
+                background: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+                padding: 24px 16px;
+                margin: 20px auto;
+                transition: box-shadow 0.2s;
+            }
+ @media(max-width: 768px){
+            header #branding,
+            header nav,
+            header nav li {
+                float: none;
+                text-align: center;
+                width: 100%;
+                grid-template-columns: 1fr;
+            }
+            header nav ul {
+                display: grid;
+                gap: 10px;
+                grid-template-columns: 1fr 1fr;
+            }
+            .about-cont {
+                width: 90%;
+                margin: auto;
+                max-height: 400px;
+                overflow: scroll;
+            }
+            .members-cont {
+                width: 90%;
+                margin: auto;
+                display: flex;
+                flex-wrap: wrap;      
+                gap: 24px;            
+                justify-content: center; 
+                align-items: center; 
+                overflow: show; 
+                flex-direction: column;
+            }
+            .book-box {
+                background: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+                padding: 24px 16px;
+                margin: 20px auto;
+                width: 90%;
+                display: flex;
+                flex-wrap: nowrap;
+                align-items: center;
+                transition: box-shadow 0.2s;
+                gap: 30px;
+            }
+        }
+            
+        
+        </style> 
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div id="branding">
+                    <h1><span class="highlight">Library</span> System</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="Admin-Dashboard.html">Dashboard</a></li>
+                        <li><a href="books.html">Books</a></li>
+                        <li><a href="admin-manage borrowers.html">Manage Borrowers</a></li>
+                        <li class="current"><a href="About.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <section id="main">
+            <div class="about-cont">
+                <h1 style="text-align: center; margin-bottom: 20px;">About the Project</h1>
+                <p style="text-align: center; margin-bottom: 20px;">
+                    Welcome to our innovative library system, where the love for reading meets the convenience of modern technology. We've created a comprehensive online platform that revolutionizes the way you interact with books, offering a seamless and flexible experience for every type of reader. Our system goes beyond the traditional library model, providing a trifecta of options to suit your individual needs. You can discover and buy your next favorite book from our extensive collection, enjoy temporary access by renting titles without the commitment of a purchase, or borrow books for a set period, just like you would at a physical library. Our mission is to make literature more accessible to everyone, everywhere, and we've created a one-stop-shop for all your reading needs by integrating buying, renting, and borrowing into a single, intuitive platform. We are dedicated to providing a rich and diverse catalog, exceptional customer service, and a truly enjoyable reading journey.
+               </p>
+            </div>
+                        
+                 
+           
+            <h2 style="margin-left:10%;">Members</h2>
+            <div class="members-cont">
+                <div class="book-box">
+                    <div class="member">
+                        <img src="Imgsrc/ako.jpg" alt="Member Profile Picture">
+                        <h3 class="member-name"> Petralba, Mark Daniel A.</h3>
+                        <div class="member-details">
+                            <p>Facebook: <a href="https://www.facebook.com/mark.daniel.petralba.2024">Mark Daniel Petralba</a></p>
+                            <p>Instagram: <a href="https://instagram.com/ishoboidaniel">ishoboidaniel</a></p>
+                            <p>TikTok: <a href="https://tiktok.com/@awitizeddaniel">@awitizeddaniel</a></p>
+                            <p>Telegram: <a href="https://t.me/cococrunchybop">cococrunchybop</a></p>
+                        </div>
+                        <div class="fave-quts">
+                    
+                        </div>
+                    </div>
+                </div>    
+
+                <div class="book-box">
+                    <div class="member">
+                        <img src="Imgsrc/Viado.jpg" alt="Member Profile Picture">
+                        <h3 class="member-name"> Viado, Edriyan TJ B.</h3>
+                        <div class="member-details">
+                            <p>Facebook: <a href="https://www.facebook.com/edriyan15">Viado Edriyan</a></p>
+                            <p>Instagram: <a href="instagram.com/Tj_Viado">Tj_Viado</a></p>
+                            <p>TikTok: <a href="#">Edriyan</a></p>
+                            <p>Telegram: <a href="#">TJ Bautista</a></p>
+                        </div>
+                    </div> 
+                </div>
+
+                <div class="book-box">
+                    <div class="member">
+                        <img src="Imgsrc/Milan.jpg" alt="Member Profile Picture">
+                        <h3 class="member-name">Milan, Justin </h3>
+                        <div class="member-details">
+                            <p>Facebook: <a href="#">Milan Justin</a></p>
+                            <p>Instagram: <a href="#">MJ JUSTIN</a></p>
+                            <p>TikTok: <a href="#">justinmatthewmilan</a></p>
+                            <p>Telegram: <a href="#">Justin Matthew Milan</a></p>
+                        </div>
+                    </div> 
+                </div>
+
+                <div class="book-box">
+                    <div class="member">
+                        <img src="Imgsrc/Rubio.jpg" alt="Member Profile Picture">
+                        <h3 class="member-name">Rubio, Jake Lindon R.</h3>
+                        <div class="member-details">
+                            <p>Facebook: <a href="#">Jake Rubio</a></p>
+                            <p>Instagram: <a href="#">Jake Rubio</a></p>
+                            <p>TikTok: <a href="#">Jake Rubio</a></p>
+                            <p>Telegram: <a href="#">Jake Rubio</a></p>
+                        </div>
+                    </div> 
+                </div>
+
+                <div class="book-box">
+                    <div class="member">
+                        <img src="Imgsrc/Victoriano.jpg" alt="Member Profile Picture">
+                        <h3 class="member-name">Victoriano, Rhed Weslhee R.</h3>
+                        <div class="member-details">
+                            <p>Facebook: <a href="#">Rhed Weslhee R. Victoriano</a></p>
+                            <p>Instagram: <a href="#">Rhed Weslhee</a></p>
+                            <p>TikTok: <a href="#">Rhed</a></p>
+                        </div>
+                    </div> 
+                </div>
+            </div>
+        </section>
+
+        <footer>
+            <p>Library System</p>
+        </footer>
+    </body>
+    </html>

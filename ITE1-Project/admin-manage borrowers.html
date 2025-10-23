@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="kainis.css">
+    <title>Library System - Members</title>
+    <style>
+
+        .members-cont {
+            width: 80%;
+            margin: auto;
+            display: flex;
+            flex-wrap: wrap;      
+            gap: 24px;            
+            justify-content: flex-start; 
+            align-items: flex-start; 
+            overflow: show;  
+        }       
+        .book-box {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            padding: 24px 16px;
+            margin: 20px auto;
+            width: 30%;
+            display: flex;
+            flex-wrap: nowrap;
+            align-items: center;
+            transition: box-shadow 0.2s;
+            gap: 30px;
+        }
+        
+       .about-cont {
+            width: 60%;
+            margin: auto;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            padding: 24px 16px;
+            margin: 20px auto;
+            transition: box-shadow 0.2s;
+        }
+        .damn {
+            max-width:700px;
+            margin:40px auto;background:#fff;
+            padding:30px;
+            border-radius:8px;
+            box-shadow:0 2px 8px rgba(0,0,0,0.08);
+            border: #e8491d 3px solid;
+        }
+        @media(max-width: 768px){
+            header #branding,
+            header nav,
+            header nav li {
+                float: none;
+                text-align: center;
+                width: 100%;
+                grid-template-columns: 1fr;
+            }
+            header nav ul {
+                display: grid;
+                gap: 10px;
+                grid-template-columns: 1fr 1fr;
+            }
+            .damn {
+                width: 80%;
+                max-width: 80%;
+            }
+            
+        }
+            
+        
+    </style> 
+</head>
+<body>
+    <header>
+    <div class="container">
+        <div id="branding">
+            <h1><span class="highlight">Library</span> System</h1>
+        </div>
+        <nav>
+            <ul>
+                <li ><a href="Admin-Dashboard.html">Dashboard</a></li>
+                <li><a href="admin-books.html">Books</a></li>
+                <li class="current"><a href="admin-manage borrowers.html">Manage Borrowers</a></li>                    
+                <li><a href="About.html">About</a></li>
+            </ul>
+        </nav>
+    </div>
+</header>
+<main>
+        <div class="damn" >
+            <section style="margin-bottom:30px;">
+                <h3>Add a Student</h3>
+                <input type="text" id="add-student-name" placeholder="Student Name">
+                <input type="text" id="add-student-id" placeholder="Student ID">
+                <button id="add-student-btn">Add Student</button>
+                <span id="add-student-msg"></span>
+            </section>
+            <section style="margin-bottom:30px;">
+                <h3>Registered Students</h3>
+                <table id="students-table" style="width:100%;border-collapse:collapse;">
+                    <thead>
+                        <tr><th>Name</th><th>ID</th><th>Remove</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div style="margin-top:10px;">
+                    <input type="text" id="remove-student-id" placeholder="Student ID">
+                    <button id="remove-student-btn">Remove Student</button>
+                    <span id="remove-student-msg"></span>
+                </div>
+            </section>
+            <section style="margin-bottom:30px;">
+                <h3>Book Issuance</h3>
+                <input type="text" id="issue-book-id" placeholder="Book ID">
+                <input type="text" id="issue-student-id" placeholder="Student ID">
+                <button id="issue-book-btn">Issue Book</button>
+                <span id="issue-book-msg"></span>
+            </section>
+            <section style="margin-bottom:30px;">
+                <h3>Book Renewal/Return</h3>
+                <input type="text" id="renew-return-book-id" placeholder="Book ID">
+                <select id="renew-return-type">
+                    <option value="renew">Renew</option>
+                    <option value="return">Return</option>
+                </select>
+                <button id="renew-return-btn">Confirm</button>
+                <span id="renew-return-msg"></span>
+            </section>
+            <section>
+                <h3>Faulter Lists</h3>
+                <table id="faulter-table" style="width:100%;border-collapse:collapse;">
+                    <thead>
+                        <tr><th>Student Name</th><th>Book ID</th><th>Status</th></tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+            </section>
+        </div>
+        </main>
+       
+        <script>
+          
+            let students = JSON.parse(localStorage.getItem('students') || '[{"name":"Juan Dela Cruz","id":"2023001"},{"name":"Maria Santos","id":"2023002"}]');
+            let faulters = JSON.parse(localStorage.getItem('faulters') || '[]');
+
+            function renderStudents() {
+                const tbody = document.querySelector('#students-table tbody');
+                tbody.innerHTML = '';
+                students.forEach(s => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${s.name}</td><td>${s.id}</td><td><button onclick='removeStudentById("${s.id}")'>Remove</button></td>`;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            function renderFaulters() {
+                const tbody = document.querySelector('#faulter-table tbody');
+                tbody.innerHTML = '';
+                faulters.forEach(f => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${f.studentName}</td><td>${f.bookId}</td><td>${f.status}</td>`;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            document.getElementById('remove-student-btn').onclick = function() {
+                const id = document.getElementById('remove-student-id').value.trim();
+                const idx = students.findIndex(s => s.id === id);
+                if (idx !== -1) {
+                    students.splice(idx, 1);
+                    localStorage.setItem('students', JSON.stringify(students));
+                    renderStudents();
+                    document.getElementById('remove-student-msg').textContent = 'Student removed.';
+                } else {
+                    document.getElementById('remove-student-msg').textContent = 'Student not found.';
+                }
+            };
+
+            window.removeStudentById = function(id) {
+                const idx = students.findIndex(s => s.id === id);
+                if (idx !== -1) {
+                    students.splice(idx, 1);
+                    localStorage.setItem('students', JSON.stringify(students));
+                    renderStudents();
+                }
+            };
+
+            document.getElementById('issue-book-btn').onclick = function() {
+                const bookId = document.getElementById('issue-book-id').value.trim();
+                const studentId = document.getElementById('issue-student-id').value.trim();
+                const student = students.find(s => s.id === studentId);
+                if (bookId && student) {
+                    document.getElementById('issue-book-msg').textContent = `Book ${bookId} issued to ${student.name}.`;
+                    faulters.push({ studentName: student.name, bookId, status: 'Borrowing' });
+                    localStorage.setItem('faulters', JSON.stringify(faulters));
+                    renderFaulters();
+                } else {
+                    document.getElementById('issue-book-msg').textContent = 'Invalid book or student ID.';
+                }
+            };
+
+            document.getElementById('renew-return-btn').onclick = function() {
+                const bookId = document.getElementById('renew-return-book-id').value.trim();
+                const type = document.getElementById('renew-return-type').value;
+                const faulter = faulters.find(f => f.bookId === bookId);
+                if (faulter) {
+                    faulter.status = type === 'renew' ? 'Renewed' : 'Returned';
+                    localStorage.setItem('faulters', JSON.stringify(faulters));
+                    renderFaulters();
+                    document.getElementById('renew-return-msg').textContent = `Book ${bookId} marked as ${faulter.status}.`;
+                } else {
+                    document.getElementById('renew-return-msg').textContent = 'Book ID not found in faulter list.';
+                }
+            };
+
+            document.getElementById('add-student-btn').onclick = function() {
+                const name = document.getElementById('add-student-name').value.trim();
+                const id = document.getElementById('add-student-id').value.trim();
+                const msg = document.getElementById('add-student-msg');
+                if (!name || !id) {
+                    msg.textContent = 'Please enter both name and ID.';
+                    return;
+                }
+                if (students.some(s => s.id === id)) {
+                    msg.textContent = 'Student ID already exists.';
+                    return;
+                }
+                students.push({ name, id });
+                localStorage.setItem('students', JSON.stringify(students));
+                renderStudents();
+                msg.textContent = 'Student added.';
+                document.getElementById('add-student-name').value = '';
+                document.getElementById('add-student-id').value = '';
+            };
+
+         
+            renderStudents();
+            renderFaulters();
+        </script>
+
+        
+    </section>
+
+    <footer>
+        <p>Library System</p>
+    </footer>
+</body>
+</html>

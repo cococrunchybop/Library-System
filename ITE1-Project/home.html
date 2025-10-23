@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="kainis.css">
+    <title>Login System</title>
+    <style>
+        .login-container {
+            background-color: white;
+            border: #e8491d 3px solid;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 300px;
+            margin-top: 50px;
+            text-align: center;
+        }
+        .login-container h2 {
+            text-align: center;
+            color: #333;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: black;
+        }
+        .form-group input {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group input:focus {
+            outline: none;
+            border-color: #4CAF50;
+        }
+        .login-btn {
+            display: block;
+            background-color: #505050;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+            width: 100%;
+        }
+        .login-btn:hover {
+            background-color: #e8491d;
+        }
+        .forgot-password {
+            text-align: center;
+            margin-top: 10px;
+        }
+        .forgot-password a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+        .forgot-password a:hover {
+            text-decoration: underline;
+        }
+        .error-message {
+            color: red;
+            margin-top: 10px;
+            text-align: center;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+        .close-button {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            cursor: pointer;
+        }
+        .watchucallit {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: flex-start;
+            gap: 40px;
+            padding: 20px 10px;
+        }
+
+        @media (max-width: 768px) {
+            .watchucallit {
+                flex-direction: column;
+                align-items: center;
+                gap: 40px;
+                padding: 20px 5px;
+            }
+            .login-container, .puto {
+                width: 100%;
+                margin: 0;
+            }
+            @media (max-width: 768px) {
+               .puto {
+                     display: none;
+                     }
+            }
+        }
+                .puto {
+                    text-align: center;
+                    padding-top: 50px;
+                }
+               
+    </style>    
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1><span class="highlight">Library</span> System</h1>
+            </div>
+        </div>
+    </header>
+<main class="main-content">               
+<div class="watchucallit">
+    <div class="puto">
+        <img src="Imgsrc/jum-removebg-preview.png   " alt="prototype pa lang yan dont cha worry" > 
+    </div>
+    <div class="login-container">
+    <h2>Login</h2>
+    <div id="error-message" class="error-message"></div>
+    <form id="login-form">
+        <div id="step1">
+            <div class="form-group">
+                <label for="username">Username:</label>
+                <input type="text" id="username" name="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+            </div>
+            <button type="submit" class="login-btn">Log In</button>
+        </div>
+    </form>
+  
+    <div class="forgot-password">
+        <a href="#">Forgot Password?</a>
+    </div>
+</div>
+</div>
+</main>
+    <script>
+        
+    (function() {
+        let users = JSON.parse(localStorage.getItem('users') || '[]');
+        const defaultUsers = [
+            { username: 'user1', password: 'pass1' },
+            { username: 'user2', password: 'pass2' },
+            { username: 'user3', password: 'pass3' }
+        ];
+        let changed = false;
+        defaultUsers.forEach(newUser => {
+            if (!users.some(u => u.username === newUser.username)) {
+                users.push(newUser);
+                changed = true;
+            }
+        });
+        if (changed) {
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+    })();
+    document.getElementById('login-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const username = document.getElementById('username').value.trim();
+        const password = document.getElementById('password').value;
+        const errorMessageDiv = document.getElementById('error-message');
+        if (!username || !password) {
+            errorMessageDiv.textContent = 'Please fill in all required fields.';
+            return;
+        }
+       
+        if (username === "aldenrichard" && password === "maine123") {
+            localStorage.setItem('firstName', 'Alden');
+            window.location.href = 'Admin-Dashboard.html';
+            return;
+        }
+      
+        const allowedUsers = [
+            { username: 'user1', password: 'pass1' },
+            { username: 'user2', password: 'pass2' },
+            { username: 'user3', password: 'pass3' }
+        ];
+        const user = allowedUsers.find(u => u.username === username && u.password === password);
+        if (user) {
+            localStorage.setItem('firstName', username);
+            window.location.href = 'Dashboard.html';
+        } else {
+            errorMessageDiv.textContent = 'Account does not exist or password is incorrect.';
+        }
+    });
+
+    
+    
+
+</script>
+<footer>
+        <p>Library System</p>
+    </footer>
+</body>
+</html>

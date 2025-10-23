@@ -1,0 +1,309 @@
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <link rel="stylesheet" href="kainis.css">
+        <title>Library System - Members</title>
+        <style>
+            .niger {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            padding: 24px 16px;
+            margin: 20px auto;
+            transition: box-shadow 0.2s;
+            width: 80%;
+            border: #e8491d 3px solid;
+            margin-top: 0px;
+        }
+            footer {
+                width: 100%;
+            }
+
+            .members-cont {
+                width: 80%;
+                margin: auto;
+                display: flex;
+                flex-wrap: wrap;      
+                gap: 24px;            
+                justify-content: flex-start; 
+                align-items: flex-start; 
+                overflow: show;  
+            }       
+            .book-box {
+                background: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+                padding: 24px 16px;
+                margin: 20px auto;
+                width: 30%;
+                display: flex;
+                flex-wrap: nowrap;
+                align-items: center;
+                transition: box-shadow 0.2s;
+                gap: 30px;
+            }
+            
+           .about-cont {
+                width: 60%;
+                margin: auto;
+                background: #fff;
+                border: 1px solid #ccc;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+                padding: 24px 16px;
+                margin: 20px auto;
+                transition: box-shadow 0.2s;
+            }
+            .overview {
+           gap: 20px;
+    display: flex;
+    flex-direction: row;
+    grid-template-columns: 1fr;
+    min-width: 250px;
+    justify-content: center; 
+    align-items: center;
+        }
+
+        .overview-card {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: center; 
+            transition: transform 0.3s;
+            width: 20%;
+            border: #e8491d 3px solid;
+        }
+        .overview-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #495057;
+        }
+
+        .overview-card p {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #343a40;
+        }
+        .chart-overview-flex {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        .overview {
+            flex: 1 1 0;
+            min-width: 0;
+        }
+        h2 {
+            color: #333;
+            text-align: center;
+        }    
+        .bok{
+            text-align: center;
+            
+        }
+         @media(max-width: 768px){
+            header #branding,
+            header nav,
+            header nav li {
+                float: none;
+                text-align: center;
+                width: 100%;
+                grid-template-columns: 1fr;
+            }
+            header nav ul {
+                display: grid;
+                gap: 10px;
+                grid-template-columns: 1fr 1fr;
+            }
+            .overview {
+                flex-direction: column;
+                align-items: center;
+                width: 100%;
+            }
+            .overview-card {
+                width: 80%;
+            }
+         }  
+        </style> 
+    </head>
+    <body>
+        <header>
+            <div class="container">
+                <div id="branding">
+                    <h1><span class="highlight">Library</span> System</h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="Admin-Dashboard.html">Dashboard</a></li>
+                        <li class="current"><a href="Admin-books.html">Books</a></li>
+                        <li><a href="admin-manage borrowers.html">Manage Borrowers</a></li>
+                        <li><a href="About.html">About</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </header>
+
+        <section id="main">
+            <div class="bok">
+            <h2>Manage Books</h2>
+            <p>Use the buttons below to manage the library's book collection.</p>
+            </div>  
+            <div class="overview">
+        <div class="overview-card">
+           <button onclick="addabook()">Add a Book</button>
+        </div>
+        <div class="overview-card">
+           <button onclick="removeabook()">Remove a Book</button>
+        </div>
+        <div class="overview-card">
+            <button onclick="searchabook()">Search for a Book</button>
+        </div>
+        
+        </div>
+        <section id="overdue-books-list" style="margin-top:40px;">
+    <div class="niger">
+    <h2 style="text-align:center;">Overdue Book List</h2>
+    <div style="overflow-x:auto;">
+        <table style="width:100%;border-collapse:collapse;background:#fff;">
+            <thead>
+                <tr style="background:#f4f4f4;">
+                    <th style="padding:10px;border:1px solid #ddd;">Book Title</th>
+                    <th style="padding:10px;border:1px solid #ddd;">Borrower Name</th>
+                    <th style="padding:10px;border:1px solid #ddd;">Due Date</th>
+                    <th style="padding:10px;border:1px solid #ddd;">Days Overdue</th>
+                </tr>
+            </thead>
+            <tbody id="overdue-books-tbody">
+               
+            </tbody>
+        </table>
+    </div>
+    </div>  
+</section>
+       
+        <section id="featured-books" style="margin-top:40px;">
+            <h2 style="text-align:center;">Featured Books</h2>
+            <div style="display:flex; flex-wrap:wrap; justify-content:center; gap:32px; margin-top:24px;">
+                <div style="background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.08); width:260px; padding:18px; text-align:center;">
+                    <img src="Bookspng/1.jpg" alt="The Secret of Secrets" style="width:100%; height:180px; object-fit:cover; border-radius:6px; border:1px solid #eee;">
+                    <h3 style="margin:12px 0 6px 0; color:#333;">The Secret of Secrets</h3>
+                    <p style="font-size:14px; color:#666;">by Dan Brown</p>
+                </div>
+                <div style="background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.08); width:260px; padding:18px; text-align:center;">
+                    <img src="Bookspng/2.jpg" alt="The Weakest Tamer" style="width:100%; height:180px; object-fit:cover; border-radius:6px; border:1px solid #eee;">
+                    <h3 style="margin:12px 0 6px 0; color:#333;">The Weakest Tamer</h3>
+                    <p style="font-size:14px; color:#666;">by Honobonoru500</p>
+                </div>
+                <div style="background:#fff; border:1px solid #ccc; border-radius:8px; box-shadow:0 2px 5px rgba(0,0,0,0.08); width:260px; padding:18px; text-align:center;">
+                    <img src="Bookspng/3.jpg" alt="Amazing Spider-Man" style="width:100%; height:180px; object-fit:cover; border-radius:6px; border:1px solid #eee;">
+                    <h3 style="margin:12px 0 6px 0; color:#333;">Amazing Spider-Man</h3>
+                    <p style="font-size:14px; color:#666;">by Dan Slott</p>
+                </div>
+            </div>
+        </section>
+        </section>
+        
+<div id="searchBookModal" style="display:none;position:fixed;z-index:1000;left:0;top:0;width:100%;height:100%;background:rgba(0,0,0,0.6);align-items:center;justify-content:center;">
+  <div style="background:#fff;padding:30px;border-radius:10px;max-width:500px;margin:auto;position:relative;box-shadow:0 4px 16px rgba(0,0,0,0.2);">
+    <span id="closeSearchModal" style="position:absolute;top:10px;right:20px;font-size:28px;cursor:pointer;color:#888;">&times;</span>
+    <h2 style="margin-top:0;color:#e8491d;">Search a Book</h2>
+    <input type="text" id="searchBookInput" placeholder="Enter title, author, or genre..." style="width:100%;padding:10px;margin-bottom:18px;border-radius:6px;border:1px solid #ccc;">
+    <div id="searchBookResults"></div>
+  </div>
+</div>
+<script>
+    function addabook() {
+        window.location.href = 'add a book.html';
+    }
+    function removeabook() {
+        window.location.href = 'remove-a-book.html';
+    }
+    function searchabook() {
+        window.location.href = 'add a book.html';
+    }
+    function overduebooklist() {
+        window.location.href = 'overdue book list.html';
+    }
+
+const booksData = [
+  {title:'The Secret of Secrets',author:'Dan Brown',genre:'Thriller',imageUrl:'Bookspng/1.jpg'},
+  {title:'The Weakest Tamer',author:'Honobonoru500',genre:'Manga',imageUrl:'Bookspng/2.jpg'},
+  {title:'Amazing Spider-Man',author:'Dan Slott',genre:'Superhero',imageUrl:'Bookspng/3.jpg'}
+ 
+];
+const searchBtn = document.querySelector('.searchabook');
+const modal = document.getElementById('searchBookModal');
+const closeModal = document.getElementById('closeSearchModal');
+const searchInput = document.getElementById('searchBookInput');
+const resultsDiv = document.getElementById('searchBookResults');
+searchBtn.onclick = function() {
+  modal.style.display = 'flex';
+  searchInput.value = '';
+  resultsDiv.innerHTML = '';
+  searchInput.focus();
+};
+closeModal.onclick = function() {
+  modal.style.display = 'none';
+};
+window.onclick = function(e) {
+  if (e.target === modal) modal.style.display = 'none';
+};
+searchInput.oninput = function() {
+  const term = searchInput.value.toLowerCase();
+  const filtered = booksData.filter(b =>
+    b.title.toLowerCase().includes(term) ||
+    b.author.toLowerCase().includes(term) ||
+    b.genre.toLowerCase().includes(term)
+  );
+  if (!term) {
+    resultsDiv.innerHTML = '';
+    return;
+  }
+  if (filtered.length === 0) {
+    resultsDiv.innerHTML = '<p style="color:#e8491d;">No books found.</p>';
+    return;
+  }
+  resultsDiv.innerHTML = filtered.map(b =>
+    `<div style='display:flex;align-items:center;margin-bottom:12px;'>
+      <img src='${b.imageUrl}' alt='${b.title}' style='width:50px;height:70px;object-fit:cover;border-radius:4px;margin-right:12px;border:1px solid #eee;'>
+      <div><strong>${b.title}</strong><br><span style='font-size:13px;color:#555;'>${b.author} | ${b.genre}</span></div>
+    </div>`
+  ).join('');
+};
+
+const overdueBooks = [
+    { title: 'The Secret of Secrets', borrower: 'John Doe', dueDate: '2025-10-10', daysOverdue: 6 },
+    { title: 'Amazing Spider-Man', borrower: 'Jane Smith', dueDate: '2025-10-12', daysOverdue: 4 }
+];
+
+function renderOverdueBooks() {
+    const tbody = document.getElementById('overdue-books-tbody');
+    if (!tbody) return;
+    tbody.innerHTML = overdueBooks.length === 0
+        ? `<tr><td colspan="4" style="text-align:center;padding:16px;">No overdue books.</td></tr>`
+        : overdueBooks.map(b =>
+            `<tr>
+                <td style="padding:10px;border:1px solid #ddd;">${b.title}</td>
+                <td style="padding:10px;border:1px solid #ddd;">${b.borrower}</td>
+                <td style="padding:10px;border:1px solid #ddd;">${b.dueDate}</td>
+                <td style="padding:10px;border:1px solid #ddd;">${b.daysOverdue}</td>
+            </tr>`
+        ).join('');
+}
+document.addEventListener('DOMContentLoaded', renderOverdueBooks);
+</script>   
+</script>
+        <footer>
+            <p>Library System</p>
+        </footer>
+    </body>
+    </html>

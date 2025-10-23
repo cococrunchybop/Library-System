@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="kainis.css">
+    <title>Library System - Dashboard</title>
+    <style>
+        :root {
+            --accent: #e8491d;
+            --muted: #505050;
+            --card-bg: #fff;
+        }
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+            margin: 0;
+            background: #f4f4f4;
+            color: #333;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 16px;
+        }
+
+        header .container {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 18px 0;
+        }
+
+        #branding h1 {
+            margin: 0;
+        }
+
+        .highlight {
+            color: var(--accent);
+        }
+
+        #dashboard-content {
+            padding: 24px 16px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .chart-overview-flex {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+
+        .welcome-container {
+            background: var(--card-bg);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            min-width: 220px;
+            max-width: 320px;
+            border: 3px solid var(--accent);
+        }
+
+        .welcome-photo {
+            width: 72px;
+            height: 72px;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 3px solid var(--accent);
+            display: block;
+            margin: 0 auto 12px;
+        }
+
+        .welcome-inner {
+            text-align: center;
+        }
+
+        .overview {
+            display: flex;
+            gap: 16px;
+            flex-wrap: wrap;
+            justify-content: center;
+            align-items: center;
+            flex: 1;
+        }
+
+        .overview-card {
+            background: var(--card-bg);
+            padding: 16px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.06);
+            width: 160px;
+            text-align: center;
+            border: 3px solid var(--accent);
+        }
+
+        .overview-card h3 {
+            margin: 0 0 8px;
+            font-size: 14px;
+            color: var(--muted);
+        }
+
+        .overview-card p {
+            font-size: 20px;
+            margin: 0;
+            font-weight: 700;
+            color: #222;
+        }
+
+        .cont1 {
+            width: 100%;
+            max-width: 760px;
+            margin: 0 auto;
+        }
+
+        .niger {
+            background: var(--card-bg);
+            padding: 18px;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+            border: 3px solid var(--accent);
+            width: 100%;
+            margin: 20px 0;
+        }
+
+        .tabs {
+            width: 100%;
+        }
+
+        .tab-buttons {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+        }
+
+        .tab-buttons button {
+            padding: 8px 12px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            background: #505050;
+            color: #fff;
+            cursor: pointer;
+        }
+
+        .tab-buttons button.active {
+            background: var(--accent);
+            border-color: var(--accent);
+            color: #fff;
+        }
+
+        .tab-content > .tab-panel {
+            display: none;
+        }
+
+        .tab-content > .tab-panel.active {
+            display: block;
+        }
+
+        .tab-panel table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .tab-panel th,
+        .tab-panel td {
+            padding: 10px;
+            border: 1px solid #eee;
+            text-align: left;
+        }
+
+        .quick-actions {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+            justify-content: flex-start;
+        }
+
+        .login-btn {
+            display: inline-block;
+            padding: 10px 12px;
+            background: var(--muted);
+            color: #fff;
+            border-radius: 6px;
+            text-decoration: none;
+            text-align: center;
+        }
+
+        .login-btn:hover {
+            background: var(--accent);
+        }
+
+        @media (max-width: 900px) {
+            .chart-overview-flex {
+                flex-direction: column;
+                align-items: center;
+            }
+            .cont1 { 
+                padding: 0; 
+                margin-top: 12px; 
+                max-width: 100vh;
+            }
+            .niger { 
+                padding: 12px; 
+            }
+            .overview { 
+                order: 2; 
+            }
+            .welcome-container { 
+                order: 1; margin-bottom: 8px;
+             }
+            .welcome-container {
+                max-width: 100%;
+            }
+        
+
+            }
+        
+
+        @media (max-width: 600px) {
+            .overview-card {
+                width: 100%;
+            }
+
+            .tab-buttons {
+                justify-content: center;
+            }
+            .niger {
+                padding: 10px;
+                max-width: 100vh;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1><span class="highlight">Library</span> System</h1>
+            </div>
+            <nav>
+                <ul style="list-style: none; display: flex; gap: 12px; margin: 0; padding: 0;">
+                    <li><a href="Dashboard.html">Dashboard</a></li>
+                    <li><a href="managebook.html">Manage Books</a></li>
+                    <li><a href="manageborrower.html">Manage Borrowers</a></li>
+                    <li><a href="report.html">Make Report</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="dashboard-content" class="container">
+        <h1 style="text-align: center; color: #333; margin-bottom: 20px;">Librarian Dashboard</h1>
+
+        <div class="chart-overview-flex">
+            <div class="welcome-container">
+                <div class="welcome-inner">
+                    <img src="Imgsrc/alden-richards-tongue-meme.gif" alt="Profile Photo" class="welcome-photo">
+                    <h2>Welcome, <span id="user-name"></span></h2>
+                    <p style="margin: 6px 0 0;">Have a productive day.</p>
+
+                    <section style="margin-top: 12px;">
+                        <h3 style="font-size: 14px; color: var(--muted); margin: 8px 0;">Quick Navigation</h3>
+                        <ul style="list-style: none; padding: 0; margin: 0;">
+                            <li style="margin-bottom: 8px;"><a class="login-btn" href="managebook.html">Manage Books</a></li>
+                            <li style="margin-bottom: 8px;"><a class="login-btn" href="admin-manage borrowers.html">Manage Borrowers</a></li>
+                            <li><a class="login-btn" href="home.html">Log out</a></li>
+                        </ul>
+                    </section>
+                </div>
+            </div>
+
+            <div class="overview" aria-hidden="false">
+                <div class="overview-card">
+                    <h3>Visits</h3>
+                    <p id="visits-count">300</p>
+                </div>
+                <div class="overview-card">
+                    <h3>Available Books</h3>
+                    <p id="books-count">150</p>
+                </div>
+                <div class="overview-card">
+                    <h3>Borrowed Books</h3>
+                    <p id="borrows-count">0</p>
+                </div>
+                <div class="overview-card">
+                    <h3>Overdue Books</h3>
+                    <p id="overdue-count">0</p>
+                </div>
+                <div class="cont1">
+                <div class="niger">
+                    <h2 style="color: var(--accent); margin: 0 0 12px;">Quick Actions</h2>
+
+                    <div class="quick-actions" style="margin-bottom: 12px;">
+                        <a href="managebook.html" class="login-btn">Manage Books</a>
+                        <a href="admin-manage borrowers.html" class="login-btn">Manage Borrowers</a>                        
+                        <a href="report.html" class="login-btn">Make Report</a>
+                    </div>
+
+                    <div style="margin-top: 12px;">
+                        <input type="text" id="quick-search" placeholder="Quick search books or borrowers..." style="width:60%; padding:10px; border-radius:5px; border:1px solid #ccc;">
+                        <button class="login-btn" id="search-btn" style="width:120px; display:inline-block; margin-left:8px;">Search</button>
+                    </div>
+
+                    <div id="search-results" style="margin-top:12px; color:#333;"></div>
+                </div>
+
+                <div style="margin-top:18px;" class="niger">
+                    <div class="tabs">
+                        <div class="tab-buttons" role="tablist" aria-label="Main tabs">
+                            <button class="active" data-target="borrowed-panel" role="tab" aria-selected="true">Borrowed Books</button>
+                            <button data-target="overdue-panel" role="tab" aria-selected="false">Overdue Books</button>
+                           
+                        </div>
+
+                        <div class="tab-content">
+                            <div id="borrowed-panel" class="tab-panel active" role="tabpanel" aria-hidden="false">
+                                <h3 style="margin-top:0;">Borrowed Books</h3>
+                                <div style="overflow-x:auto;">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Book Title</th>
+                                                <th>Book ID</th>
+                                                <th>Date Borrowed</th>
+                                                <th>Date to Return</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="borrowed-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="overdue-panel" class="tab-panel" role="tabpanel" aria-hidden="true">
+                                <h3 style="margin-top:0;">Overdue Books</h3>
+                                <div style="overflow-x:auto;">
+                                    <table>
+                                        <thead>
+                                            <tr>
+                                                <th>Borrower</th>
+                                                <th>Book Title</th>
+                                                <th>Due Date</th>
+                                                <th>Status</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="overdue-table-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div id="reports-panel" class="tab-panel" role="tabpanel" aria-hidden="true">
+                                <h3 style="margin-top:0;">Submitted Reports</h3>
+                                <div style="overflow-x:auto;">
+                                    <table class="report-table">
+                                        <thead>
+                                            <tr>
+                                                <th>ID</th>
+                                                <th>Type</th>
+                                                <th>Title</th>
+                                                <th>Status</th>
+                                                <th>Date/Time</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="dashboard-reports-body"></tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+
+           
+        </div>
+    </section>
+
+    <footer style="text-align:center; padding:16px; background:var(--accent); color:#fff; margin-top:20px;">
+        Library System
+    </footer>
+
+    <script>
+        document.getElementById('user-name').textContent = localStorage.getItem('firstName') || 'User';
+
+        (function () {
+            const tabButtons = document.querySelectorAll('.tab-buttons button');
+            tabButtons.forEach(btn => {
+                btn.addEventListener('click', () => {
+                    const target = btn.dataset.target;
+                    tabButtons.forEach(b => {
+                        b.classList.remove('active');
+                        b.setAttribute('aria-selected', 'false');
+                    });
+                    document.querySelectorAll('.tab-content > .tab-panel').forEach(p => {
+                        p.classList.remove('active');
+                        p.setAttribute('aria-hidden', 'true');
+                    });
+                    btn.classList.add('active');
+                    btn.setAttribute('aria-selected', 'true');
+                    const panel = document.getElementById(target);
+                    if (panel) {
+                        panel.classList.add('active');
+                        panel.setAttribute('aria-hidden', 'false');
+                    }
+                });
+            });
+        })();
+
+        function updateDashboardStats() {
+            const transactions = JSON.parse(localStorage.getItem('borrowingTransactions')) || [];
+            document.getElementById('borrows-count').textContent = transactions.length;
+            const overdue = transactions.filter(t => t.status === 'Overdue').length;
+            document.getElementById('overdue-count').textContent = overdue;
+            document.getElementById('books-count').textContent = (localStorage.getItem('booksCount') || 150);
+            document.getElementById('visits-count').textContent = (localStorage.getItem('visits') || 300);
+
+            const borrowedBody = document.getElementById('borrowed-body');
+            borrowedBody.innerHTML = '';
+            transactions.slice().reverse().slice(0, 10).forEach(t => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${t.bookTitle || 'N/A'}</td><td>${t.bookId || ''}</td><td>${t.date || ''}</td><td>${t.dueDate || ''}</td>`;
+                borrowedBody.appendChild(tr);
+            });
+
+            const overdueBody = document.getElementById('overdue-table-body');
+            overdueBody.innerHTML = '';
+            const overdueList = transactions.filter(t => t.status === 'Overdue');
+            if (overdueList.length === 0) {
+                overdueBody.innerHTML = `<tr><td colspan="4" style="text-align:center;color:#888;padding:12px">No overdue books.</td></tr>`;
+            } else {
+                overdueList.forEach(t => {
+                    const tr = document.createElement('tr');
+                    tr.innerHTML = `<td>${t.borrower || 'Unknown'}</td><td>${t.bookTitle || ''}</td><td>${t.dueDate || ''}</td><td>${t.status || ''}</td>`;
+                    overdueBody.appendChild(tr);
+                });
+            }
+        }
+
+        function renderDashboardReports() {
+            const tbody = document.getElementById('dashboard-reports-body');
+            const reports = JSON.parse(localStorage.getItem('unifiedReports') || '[]');
+            tbody.innerHTML = '';
+            if (reports.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="5" style="text-align:center;color:#888;padding:12px">No reports submitted.</td></tr>`;
+                return;
+            }
+            reports.forEach(r => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `<td>${r.id}</td><td>${r.type}</td><td>${r.title || ''}</td><td>${r.status || ''}</td><td>${r.date || ''}</td>`;
+                tbody.appendChild(tr);
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            updateDashboardStats();
+            renderDashboardReports();
+
+            document.getElementById('overdue-btn').addEventListener('click', function () {
+                document.querySelectorAll('.tab-buttons button').forEach(b => b.classList.remove('active'));
+                const btn = document.querySelector('.tab-buttons button[data-target="overdue-panel"]');
+                if (btn) {
+                    btn.classList.add('active');
+                    btn.click();
+                }
+            });
+
+            document.getElementById('search-btn').addEventListener('click', function () {
+                const query = document.getElementById('quick-search').value.trim().toLowerCase();
+                const resultsDiv = document.getElementById('search-results');
+                resultsDiv.innerHTML = '';
+                if (!query) {
+                    resultsDiv.textContent = 'Enter a search term.';
+                    return;
+                }
+                const books = ['The Secret of Secrets', 'Amazing Spider-Man', 'KJV, Know The Word Study Bible', 'The 48 Laws of Power'];
+                const bookMatches = books.filter(b => b.toLowerCase().includes(query));
+                const borrowers = JSON.parse(localStorage.getItem('borrowersData') || '[]');
+                const borrowerMatches = borrowers.filter(b => (b.name || '').toLowerCase().includes(query));
+                let html = '';
+                if (bookMatches.length) {
+                    html += `<div><strong>Books:</strong><ul style="margin:0;padding-left:18px">${bookMatches.map(b => `<li>${b}</li>`).join('')}</ul></div>`;
+                }
+                if (borrowerMatches.length) {
+                    html += `<div style="margin-top:8px"><strong>Borrowers:</strong><ul style="margin:0;padding-left:18px">${borrowerMatches.map(b => `<li>${b.name}</li>`).join('')}</ul></div>`;
+                }
+                resultsDiv.innerHTML = html || 'No results found.';
+            });
+
+            window.addEventListener('storage', function () {
+                updateDashboardStats();
+                renderDashboardReports();
+            });
+        });
+    </script>
+</body>
+</html>

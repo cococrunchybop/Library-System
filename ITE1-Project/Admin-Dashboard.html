@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="kainis.css">
+    <title>Library System - Dashboard</title>
+    <style>
+        body{
+            min-height: 100vh;
+        }
+        .niger {
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            padding: 24px 16px;
+            margin: 20px auto;
+            transition: box-shadow 0.2s;
+            width: 80%;
+            border: #e8491d 3px solid;
+            margin-top: 0px;
+        }
+        .dashboard-section h2 {
+            color: #e8491d;
+            margin-bottom: 15px;
+            
+        }
+
+        .dashboard-links {
+            list-style: none;
+            padding: 0;
+        }
+
+        .dashboard-links li {
+            margin-bottom: 10px;
+        }
+
+        .dashboard-links a {
+            display: block;
+            background-color: #505050;
+            color: white;
+            text-align: center;
+            padding: 10px;
+            text-decoration: none;
+            border-radius: 4px;
+            transition: background-color 0.3s ease;
+        }
+
+        .dashboard-links a:hover {
+            background-color: #e8491d;
+        }
+
+        footer {
+            padding: 20px;
+            margin-top: 20px;
+            color: #fff;
+            background-color: #e8491d;
+            text-align: center;
+        }
+
+        
+       
+.chart-canvas {
+    flex-shrink: 0;
+}
+
+.overview {
+            gap: 20px;
+            display: flex;
+            flex-direction: row;
+            grid-template-columns: 1fr;
+            align-items: center;
+            min-width: 250px;
+            
+        }
+
+        .overview-card {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            text-align: left; 
+            transition: transform 0.3s;
+            width: 200%;
+            height: 50%;
+            border: #e8491d 3px solid;
+        }
+        .overview-card h3 {
+            margin-top: 0;
+            margin-bottom: 10px;
+            font-size: 18px;
+            color: #495057;
+        }
+
+        .overview-card p {
+            margin: 0;
+            font-size: 20px;
+            font-weight: bold;
+            color: #343a40;
+        }
+        .chart-overview-flex {
+            display: flex;
+            gap: 20px;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            justify-content: space-around;
+            width: 100%;
+        }
+        .welcome-container,
+        .div-container,
+        .overview {
+            flex: 1 1 0;
+            min-width: 0;
+        }
+        .welcome-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-right: 18px;
+            border: 3px solid #e8491d;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+        }
+        .welcome-container {
+            background: #fff;
+            padding: 30px 24px;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            min-width: 15%;
+            max-width: 300px;
+            display: flex;
+            align-items: flex-start;
+            justify-content: center;
+            height: 100%;
+            border: #e8491d 3px solid;
+        }
+        .welcome-inner {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .welcome-photo {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            object-fit: cover;
+            margin-bottom: 18px;
+            border: 3px solid #e8491d;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.08);
+            margin-right: 0;
+        }
+        .div-container {
+            display: flex;
+            flex-direction: row;
+            gap: 1rem;
+            justify-content: center;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            margin-bottom: 20px;
+            height: max-content;
+            width: 100%;
+        }
+        .cont1 {
+            display: flex;
+            margin-bottom: 20px;
+            justify-content: center;
+            align-items: center;
+            max-width: 70%;
+            flex-direction: column;
+            flex-wrap: wrap;
+        }
+        .overdue-books {
+            background-color: white;
+            border: #e8491d 3px solid;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+            width: 20%;
+            margin-top: 50px;
+            text-align: center;
+            margin-left: 10px;
+            margin-right: 10px;
+            min-width: 400px;
+            justify-content: center;
+            align-items: center;
+            height: 300px;
+            overflow: scroll;
+            overflow-y: auto;
+            flex-shrink: 1;
+            flex-grow: 0;
+            flex-basis: auto;
+        }
+        .overdue-books body{
+            display:block;
+            overflow:auto;
+            height:200px;
+            width: 80%;
+        }
+       .tabs { width: 100%; }
+       .tab-buttons { display: flex; gap: 8px; margin-bottom: 12px; justify-content: flex-start; flex-wrap: wrap; }
+       .tab-buttons button {
+           padding: 8px 12px;
+           margin-top: 10px;
+           border-radius: 6px;
+           border: 1px solid #ccc;
+           background: #505050;
+           cursor: pointer;
+       }
+       .tab-buttons button.active {
+           background: #e8491d;
+           color: #fff;
+           border-color: #e8491d;
+       }
+       .tab-content > div { display: none; }
+       .tab-content > div.active { display: block; }
+       /* make the inner tables responsive */
+       .tab-panel .overdue-books {
+           width: 100%;
+           min-width: 0;
+           margin: 0;
+           padding: 12px;
+           box-sizing: border-box;
+       }
+       .tab-panel table { width: 100%; border-collapse: collapse; }
+       .tab-panel th, .tab-panel td { padding: 8px; border: 1px solid #ddd; text-align: left; }
+       @media(max-width: 768px){
+           .tab-buttons { justify-content: center; }
+       }
+        
+         @media(max-width: 768px){
+            header #branding,
+            header nav,
+            header nav li {
+                float: none;
+                text-align: center;
+                width: 100%;
+                grid-template-columns: 1fr;
+            }
+            header nav ul {
+                display: grid;
+                gap: 10px;
+                grid-template-columns: 1fr 1fr;
+            }
+           .chart-overview-flex{
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            width: 100%;
+           }
+            header {
+                padding-bottom: 20px;
+            }
+            .welcome-container {
+                max-width: 100%;
+                margin-bottom: 20px;
+                align-items: stretch;
+            }
+            .overview{
+                display: flex;
+                flex-direction: column;
+                max-width: 100%;
+                align-items: center;
+                
+            }
+            .overview-card{
+                width: 100%;
+                height: auto;
+
+            }
+            .niger {
+                width: 90%;
+                overflow: scroll;
+            }
+            .div-container {
+                max-width: 100%;
+            }
+            .overdue-books{
+                max-width: 90vw;
+                height: 180px;
+                min-width: 260px;
+                padding: 10px;
+                overflow-y: auto;
+                overflow-x: auto;
+                box-sizing: border-box;
+            }
+            .cont1 {
+                max-width: 90%;
+            }
+
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div id="branding">
+                <h1><span class="highlight">Library</span> System</h1>
+            </div>
+            <nav>
+                <ul>
+                    <li class="current"><a href="Admin-Dashboard.html">Dashboard</a></li>
+                    <li><a href="admin-books.html">Books</a></li>
+                    <li><a href="admin-manage borrowers.html">Manage Borrowers</a></li>                    
+                    <li><a href="About.html">About</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+<section id="main">
+
+    <div class="chart-overview-flex">
+    <div class="welcome-container">
+    <div class="welcome-inner">
+        <img src="Imgsrc/alden-richards-tongue-meme.gif" alt="Profile Photo" class="welcome-photo">
+        <h2>Welcome, <span id="user-name"></span>!</h2>
+        <p>Its a beautiful day isnt it?</p>
+        <section class="dashboard-section" style="box-shadow:none; background:none; padding:0; margin:0;">
+            <h2 style="color:#505050; margin:16px 0 8px 0; font-size:1.2em;">Quick Navigation</h2>
+            <ul class="dashboard-links">
+                <li><a href="Admin-books.html">Manage Books</a></li>
+                <li><a href="admin-manage borrowers.html">Manage Borrowers</a></li>
+                <li><a href="home.html">Log out</a></li>
+            </ul>
+        </section>
+    </div>
+    </div>
+<div class="cont1">
+    <div class="overview">
+        <div class="overview-card">
+            <h3>Visits</h3>
+            <p>300</p>
+        </div>
+        <div class="overview-card">
+            <h3>Available Books</h3>
+            <p>150</p>
+        </div>
+        <div class="overview-card">
+            <h3>Borrowed books</h3>
+            <p>200</p>
+        </div>
+        <div class="overview-card">
+        <h3> Overdue Books</h3>
+        <p>650</p>
+        </div>
+    </div>
+    
+        <div class="tabs">
+    <div class="tab-buttons" role="tablist" aria-label="Overdue tabs">
+       <button class="active" data-target="borrowed-panel" role="tab" aria-selected="true">Borrowed Books</button>
+       <button data-target="overdue-panel" role="tab" aria-selected="false">Overdue Books</button>
+       <button data-target="reports-panel" role="tab" aria-selected="false">Submitted Reports</button>
+    </div>
+
+    <div class="tab-content">
+        <div id="borrowed-panel" class="tab-panel active" role="tabpanel" aria-hidden="false">
+            <div class="overdue-books">
+                <h2>Borrowed Books</h2>
+                <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Book Title</th>
+                            <th>Book Id</th>
+                            <th>Date Borrowed</th>
+                            <th>Date to Return</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>The Great Gatsby</td>
+                            <td>BK188</td>
+                            <td>2023-10-01</td>
+                            <td>2023-10-15</td>
+                        </tr>
+                        <tr>
+                            <td>To Kill a Mockingbird</td>
+                            <td>BK166</td>
+                            <td>2023-10-05</td>
+                            <td>2023-10-19</td>
+                        </tr>
+                        <tr>
+                            <td>1984</td>
+                            <td>BK011</td>
+                            <td>2023-10-07</td>
+                            <td>2023-10-21</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="overdue-panel" class="tab-panel" role="tabpanel" aria-hidden="true">
+            <div class="overdue-books">
+                <h2>Overdue books</h2>
+                <div style="overflow-x:auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Student name</th>
+                            <th>Book id</th>
+                            <th>Date Borrowed</th>
+                            <th>Date to return</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                       <tr>
+                            <td>Juan Dela Cruz</td>
+                            <td>BK123</td>
+                            <td>2023-09-20</td>
+                            <td>2023-10-04</td>
+                        </tr>
+                        <tr>
+                            <td>Maria Clara</td>
+                            <td>BK215</td>
+                            <td>2023-09-25</td>
+                            <td>2023-10-09</td>
+                        </tr>
+                        <tr>
+                            <td>Pedro Penduko</td>
+                            <td>BK178</td>
+                            <td>2023-09-28</td>
+                            <td>2023-10-12</td>
+                        </tr>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+
+        <div id="reports-panel" class="tab-panel" role="tabpanel" aria-hidden="true">
+            <div class="overdue-books tab-panel-reports" style="padding:12px; box-sizing:border-box;">
+                <h2>Submitted Reports</h2>
+                <div style="overflow-x:auto;">
+                    <table class="report-table" style="width:100%;border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Type</th>
+                                <th>Book Title</th>
+                                <th>Status / Problems</th>
+                                <th>Date/Time</th>
+                            </tr>
+                        </thead>
+                        <tbody id="dashboard-reports-body"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+    </div>
+    </div>
+</div>    
+</div>
+
+
+<script>
+     document.getElementById('user-name').textContent = localStorage.getItem('firstName') || '';
+function renderDashboardReports() {
+    const tbody = document.getElementById('dashboard-reports-body');
+    let reports = JSON.parse(localStorage.getItem('unifiedReports') || '[]');
+    tbody.innerHTML = '';
+    if (reports.length === 0) {
+        const row = tbody.insertRow();
+        const cell = row.insertCell();
+        cell.colSpan = 5;
+        cell.textContent = 'No reports submitted.';
+        cell.style.textAlign = 'center';
+        return;
+    }
+    reports.forEach(r => {
+        const row = tbody.insertRow();
+        row.insertCell().textContent = r.id;
+        row.insertCell().textContent = r.type;
+        row.insertCell().textContent = r.title;
+        row.insertCell().textContent = r.status;
+        row.insertCell().textContent = r.date;
+    });
+}
+ (function() {
+        const tabButtons = document.querySelectorAll('.tab-buttons button');
+        tabButtons.forEach(btn => {
+            btn.addEventListener('click', () => {
+                const targetId = btn.getAttribute('data-target');
+                // deactivate all buttons / panels
+                tabButtons.forEach(b => { b.classList.remove('active'); b.setAttribute('aria-selected','false'); });
+                document.querySelectorAll('.tab-content > .tab-panel').forEach(p => {
+                    p.classList.remove('active'); p.setAttribute('aria-hidden','true');
+                });
+                // activate clicked
+                btn.classList.add('active'); btn.setAttribute('aria-selected','true');
+                const panel = document.getElementById(targetId);
+                if (panel) { panel.classList.add('active'); panel.setAttribute('aria-hidden','false'); }
+            });
+        });
+    })();
+document.addEventListener('DOMContentLoaded', renderDashboardReports);
+</script>
+</section>
+    <footer>
+        <p>Library System</p>
+    </footer>   
+</body>
+</html>

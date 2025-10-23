@@ -1,0 +1,13 @@
+JavaScript (DOM, localStorage, Events)
+JavaScript https://developer.mozilla.org/en-US/docs/Web/JavaScript
+MDN Web Docs: Introduction to the DOM https://developer.mozilla.org/en-US/docs/Web/API/Document_Object_Model/Introduction
+localStorage https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage
+JavaScript Tutorial https://www.w3schools.com/js/
+
+Form Validation
+- [MDN Web Docs: Form Validation](https://developer.mozilla.org/en-US/docs/Learn/Forms/Form_validation)
+### **Responsive Design**
+- [MDN Web Docs: Responsive Design](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Responsive_Design)
+- [W3Schools Responsive Web Design](https://www.w3schools.com/css/css_rwd_intro.asp)
+
+
